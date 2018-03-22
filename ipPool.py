@@ -8,12 +8,11 @@ class proxy:
     def getIpPool():
         # 构建请求头
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36'}
-        tarurl = 'http://www.xicidaili.com/nn'
+        tarurl = 'http://www.xicidaili.com'
         req = urllib.request.Request(tarurl,headers=headers)
         data = urllib.request.urlopen(req).read().decode('utf8')
         
         # 获取西刺代理ip上的数据
-        tarurl = 'http://www.xicidaili.com/nn'
         data = urllib.request.urlopen(tarurl).read().decode('utf8')
 
         # 利用正则匹配ip地址和端口
