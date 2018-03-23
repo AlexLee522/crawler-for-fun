@@ -4,15 +4,14 @@ import socket  # 超时设置
 
 
 class proxy:
+    #构建请求头
+    headers = ('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36')
+    opener = urllib.request.build_opener()
+    opener.addheaders = [headers]
+    urllib.request.install_opener(opener)
 
     def getIpPool():
-        # 构建请求头
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36'}
         tarurl = 'http://www.xicidaili.com'
-        req = urllib.request.Request(tarurl,headers=headers)
-        data = urllib.request.urlopen(req).read().decode('utf8')
-        
-        # 获取西刺代理ip上的数据
         data = urllib.request.urlopen(tarurl).read().decode('utf8')
 
         # 利用正则匹配ip地址和端口
@@ -44,13 +43,13 @@ class proxy:
                     timeout = 4
                     socket.setdefaulttimeout(timeout)  # 超时设置
                     data = urllib.request.urlopen(url).read().decode('utf8')
-                    if '有道' not in data: # 有时候返回有道的网页，很无奈，求解决
+                    if '有道' and '无效用户' not in data:  # 有时候返回有道的网页，很无奈，求解决
                         return data
             except:
                 continue
 
 
 # 举个栗子
-tarurl = 'http://www.baidu.com'
+tarurl = 'http://www.lysteel.com/'
 addlist = proxy.getIpPool()
 print(proxy.useProxy(addlist, tarurl))
