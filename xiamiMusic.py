@@ -39,7 +39,7 @@ nameresult = re.findall(namepattern, html, re.S)[0]
 songname = nameresult.split(' ')[2][9:-3]
 
 
-# 获取location并解密
+# 获取location
 url1 = 'http://www.xiami.com/song/playlist/id/' + songid + \
     '/object_name/default/object_id/0/cat/json?_ksTS=1522759378983_389&callback=jsonp390'
 para = {'_ksTS': '1522758305970_389', 'callback': 'jsonp390'}
