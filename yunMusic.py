@@ -12,8 +12,8 @@ headers = {
 }  # 在请求头中需加入Cookie和Referer
 
 # 一共需要传入四个参数，其中只有第一个参数是变化的
-# 抓包获得第一个参数的模板
 # first_param = "{\"ids\":\"[%d]\",\"br\":128000,\"csrf_token\":\"\"}"
+# 抓包获得第一个参数的模板
 second_param = "010001"
 third_param = "00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7"
 forth_param = "0CoJUm6Qyw8W8jud"
@@ -56,7 +56,16 @@ def get_json(url, params, encSecKey):
     return response['data']
 
 
+# 获取歌曲名字
+def get_songname(music_id,headers):
+    url = 'http://music.163.com/song?id=547976490'
+    data = requests.get(url, headers=headers).text
+    pattern = "<title>.*?</title>"
+    song_name = re.findall(pattern, data, re.S)[0].split(' ')[0][7::]
+    return song_name
+
 music_id = input("请输入歌曲id：")
+song_name = get_songname(music_id, headers)
 first_param = "{\"ids\":\"[%d]\",\"br\":128000,\"csrf_token\":\"\"}" % int(
     music_id)
 url = 'https://music.163.com/weapi/song/enhance/player/url?csrf_token='
@@ -80,5 +89,5 @@ music_url = rsp[0].get('url')  # 获取下载的mp3的url
 # 写入文件
 if music_url:
     music = requests.get(music_url)
-    file = open("/%s.mp3" % rsp[0]['id'])
+    file = open("/%s.mp3" % song_name, 'wb')
     file.write(music.content)
