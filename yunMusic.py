@@ -56,18 +56,29 @@ def get_json(url, params, encSecKey):
     return response['data']
 
 
+# 获取歌曲id
+def get_songid(song_url,headers):
+    url = song_url[0:20]+song_url[22::]
+    data = requests.get(url,headers=headers).text
+    pattern = "\"@id\": \".*?\""
+    song_id = re.findall(pattern,data)[0].split("/")[3][8:-1]
+    return song_id
+
+
 # 获取歌曲名字
-def get_songname(music_id,headers):
-    url = 'http://music.163.com/song?id=547976490'
+def get_songname(song_id,headers):
+    url = 'http://music.163.com/song?id=' + song_id
     data = requests.get(url, headers=headers).text
     pattern = "<title>.*?</title>"
     song_name = re.findall(pattern, data, re.S)[0].split(' ')[0][7::]
     return song_name
 
-music_id = input("请输入歌曲id：")
-song_name = get_songname(music_id, headers)
-first_param = "{\"ids\":\"[%d]\",\"br\":128000,\"csrf_token\":\"\"}" % int(
-    music_id)
+
+song_url = input("请输入url：")
+song_id = get_songid(song_url,headers)
+song_name = get_songname(song_id, headers)
+
+first_param = "{\"ids\":\"[%d]\",\"br\":128000,\"csrf_token\":\"\"}" % int(song_id)
 url = 'https://music.163.com/weapi/song/enhance/player/url?csrf_token='
 params = get_params()
 encSecKey = get_encSecKey()
@@ -89,5 +100,5 @@ music_url = rsp[0].get('url')  # 获取下载的mp3的url
 # 写入文件
 if music_url:
     music = requests.get(music_url)
-    file = open("/%s.mp3" % song_name, 'wb')
+    file = open("%s.mp3" % song_name, 'wb')
     file.write(music.content)
