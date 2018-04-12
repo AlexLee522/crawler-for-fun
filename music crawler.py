@@ -1,4 +1,4 @@
-version='Version 3.3'
+version='Version 4.0'
 import re
 import os
 import requests
@@ -323,6 +323,8 @@ class Netease():
         netease_resp = session.get(url, headers=headers)
         song_name=str(BeautifulSoup(netease_resp.text, 'html.parser').title).split('-')[0][7::]+str(BeautifulSoup(netease_resp.text, 'html.parser').title).split('-')[1][0:-1]
         song_name=song_name.replace('  ','-')
+        if '/' in song_name:
+            song_name=song_name.replace('/','&')
         return song_name
 
     def printdling(self,k,song_id):
@@ -448,9 +450,9 @@ url=''
 #tkinter.Label(gui,text='Music URL:').place(x=40,y=30)
 #url_area=tkinter.Entry(gui,textvariable=url).place(x=120,y=30)
 gui.update()
-btn_download=tkinter.Button(gui,text='Paste & Download',command=lambda:button(),width=18,height=3).place(x=60,y=15)
+btn_download=tkinter.Button(gui,text='Paste & Download',command=lambda:button(),width=19,height=3).place(x=59,y=15)
 gui.update()
-btn_path=tkinter.Button(gui,text='Open download folder',command=lambda:gui_output().open_file(),width=17,height=2).place(x=63,y=80)
+btn_path=tkinter.Button(gui,text='Open download folder',command=lambda:gui_output().open_file(),width=19,height=2).place(x=59,y=80)
 btn_help=tkinter.Button(gui,text='Help',command=lambda:gui_output().help_btn(),width=5,height=1).place(x=105,y=130)
 gui.update()
 gui_output().get_status('https://www.baidu.com')
